@@ -25,67 +25,63 @@ var modalPopupBtn = $('#usersOnlineBtn'),
 
 
 
-/**
- * Socket Events
- */
+// Eventos de socket
 
-// If name already exists
+// Si el nombre de usuario ya existe
 socket.on('nickname taken', function() {
 	chatNameSection.find('.form-group').addClass('has-error has-nickname-taken');
 });
 
-// Welcoming signed in user
+// Bienvenida a nuevo usuario
 socket.on('welcome', function(nickname, nicknames) {
 
-	// Show Chat Area
+	// Mostrar área de chat
 	chatNameSection.remove();
 	chatBoxSection.show(500);
 	chatInputSection.show(500);
 
 	chatBoxSection.find('#user').html('Hello, <span class="text-success">' + nickname + '</span>');
 
-	// Update users list
+	// Actualizar lista de usuarios
 	updateUsers(nicknames);
 });
 
-// Broadcast to rest of chat that user has joined
+// Comunicar al resto que un usuario se ha unido
 socket.on('user joined', function(nickname, nicknames) {
 	var userJoinedMessage = '<p class="text-primary"><em><u>' + nickname + '</u> has joined the chat.</em></p>';
 
-	// Append to chat box and scroll to latest message
+	// Agregar al chat y hacer scroll hasta la parte final
 	appendAndScroll(userJoinedMessage);
 
-	// Update users list
+	// Actualizar lista de usuarios
 	updateUsers(nicknames);
 });
 
-// Broadcast to rest of chat that user has left
+// Mostrar al resto de usuarios que el usuario se ha desconectado
 socket.on('user left', function(nickname, nicknames) {
 	var userLeftMessage = '<p class="text-warning"><em>' + nickname + ' has left the chat.</em></p>';
 
-	// Append to chat box and scroll to latest message
+	// Agregar al chat y hacer scroll hasta la parte final
 	appendAndScroll(userLeftMessage);
 
-	// Update users list
+	// Actualizar lista de usuarios
 	updateUsers(nicknames);
 });
 
-// Display incoming messages on screen
+// Mostrar mensajes entrantes en la pantalla
 socket.on('incoming', function(data, self) {
 
 	var nickname = self ? 'You' : data.nickname;
 	var self = self ? 'self' : '';
 	var receivedMessage = '<p class="entry ' + self + '"><b class="text-primary">' + nickname + ' said: </b>' + data.message + '</p>';
 
-	// Append to chat box and scroll to latest message
+	// Agregar al chat y hacer scroll hasta la parte final
 	appendAndScroll(receivedMessage);
 });
 
 
 
-/**
- * UI Events
- */
+// Eventos de la UI
 
 // Submit handler for name entry box
 chatNameForm.on('submit', function(e){
