@@ -60,28 +60,24 @@ io.sockets.on('connection', function(socket) {
 				message: data.message
 			};
 
-            // You can either use the code below
-            // to send messages to all clients...
-			//io.sockets.emit('incoming', nameAndData, null);
-
-            // ...Or you can use these lines for better flexibility
+            // Código para enviar mensajes a todos los clientes
 			socket.emit('incoming', eventArgs, true);
 			socket.broadcast.emit('incoming', eventArgs, false);
 		});
 	});
 
-    // Listening for when someone leaves - native listener for socket.io
+    // Escuchar para cuando se desconecte un usuario
 	socket.on('disconnect', function(){
 
 		socket.get('nickname', function(err, nickname){
 
-			// Remove username from users
+			// Quitarlo del array
 			nicknames.splice( nicknames.indexOf(nickname), 1 );
 
-            // Don't need to broadcast if there are no users left
+            // Si era el único usuario conectado no hay motivo por el cual comunicarlo al resto
 			if(nicknames.length === 0) return;
 
-            // Notify existing users that someone left
+            // Notificar cuando un usuario se retira
 			socket.broadcast.emit('user left', nickname, nicknames);
 		});
 		
@@ -92,5 +88,5 @@ io.sockets.on('connection', function(socket) {
 
 server.listen(port, function() { console.log("Server listening at http://localhost:"+port)});
 
-// ExpressJS routes using the 'get' verb
+// ExpressJS GET
 app.get('/', handler);
