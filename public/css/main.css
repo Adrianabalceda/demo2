@@ -1,6 +1,3 @@
-/**
- * Mixins
- */
 #user span {
   text-transform: uppercase;
 }
@@ -53,9 +50,6 @@
   overflow-y: scroll;
 }
 
-/**
- * Keyframes
- */
 @-webkit-keyframes entry {
   from {
     left: 100%;
