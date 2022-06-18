@@ -40,7 +40,7 @@ socket.on('welcome', function(nickname, nicknames) {
 	chatBoxSection.show(500);
 	chatInputSection.show(500);
 
-	chatBoxSection.find('#user').html('Hello, <span class="text-success">' + nickname + '</span>');
+	chatBoxSection.find('#user').html('Hola, <span class="text-success">' + nickname + '</span>');
 
 	// Actualizar lista de usuarios
 	updateUsers(nicknames);
@@ -48,7 +48,7 @@ socket.on('welcome', function(nickname, nicknames) {
 
 // Comunicar al resto que un usuario se ha unido
 socket.on('user joined', function(nickname, nicknames) {
-	var userJoinedMessage = '<p class="text-primary"><em><u>' + nickname + '</u> has joined the chat.</em></p>';
+	var userJoinedMessage = '<p class="text-primary"><em><u>' + nickname + '</u> se ha unido al chat.</em></p>';
 
 	// Agregar al chat y hacer scroll hasta la parte final
 	appendAndScroll(userJoinedMessage);
@@ -59,7 +59,7 @@ socket.on('user joined', function(nickname, nicknames) {
 
 // Mostrar al resto de usuarios que el usuario se ha desconectado
 socket.on('user left', function(nickname, nicknames) {
-	var userLeftMessage = '<p class="text-warning"><em>' + nickname + ' has left the chat.</em></p>';
+	var userLeftMessage = '<p class="text-warning"><em>' + nickname + ' se ha desconectado del chat.</em></p>';
 
 	// Agregar al chat y hacer scroll hasta la parte final
 	appendAndScroll(userLeftMessage);
@@ -71,9 +71,9 @@ socket.on('user left', function(nickname, nicknames) {
 // Mostrar mensajes entrantes en la pantalla
 socket.on('incoming', function(data, self) {
 
-	var nickname = self ? 'You' : data.nickname;
+	var nickname = self ? 'Tú' : data.nickname;
 	var self = self ? 'self' : '';
-	var receivedMessage = '<p class="entry ' + self + '"><b class="text-primary">' + nickname + ' said: </b>' + data.message + '</p>';
+	var receivedMessage = '<p class="entry ' + self + '"><b class="text-primary">' + nickname + ': </b>' + data.message + '</p>';
 
 	// Agregar al chat y hacer scroll hasta la parte final
 	appendAndScroll(receivedMessage);
