@@ -16,35 +16,34 @@ var nicknames = [];
 
 io.sockets.on('connection', function(socket) {
 
-    // When user enters name from the client
+    // // Cuando el usuario ingresa el nombre desde el cliente
 	socket.on('new user', function(data) {
 
 		var nicknameTaken;
 
-        // Ensure submitted username doesn't already exist
-		// Case insensitive checking
+        // Asegurarse de que el nombre no exista ya
 		nicknames.forEach(function(name){
 			if ( name.toLowerCase() === data.nickname.toLowerCase() ) {
-                nicknameTaken = true; // Set nicknameTaken to true if name already exists
+                nicknameTaken = true; // Si existe activamos la bandera
 				return;
 			}
 		});
 
 		if ( nicknameTaken ) {
-            // Send notification to client that username already exists
+            // Enviar notificacion si existe el nombre
 			socket.emit('nickname taken');
 
 		} else {
-            // Or else create new username
+            // Sino creamos nuevo usuario
 			socket.set("nickname", data.nickname, function() {
 
-				// Update 'nicknames' array
+				// Añadimos al array
 				nicknames.push(data.nickname);
 
-                // Welcome the user who joined
+                // Le damos la bienvenida al usuario
 				socket.emit('welcome', data.nickname, nicknames);
 
-                // Broadcast to other clients that a user has joined
+                // Mostramos a los demás que un usuario se ha conectado
 				socket.broadcast.emit('user joined', data.nickname, nicknames);
 			});
 
@@ -52,7 +51,7 @@ io.sockets.on('connection', function(socket) {
 		
 	});
 
-    // Listening for chat messages being sent
+    // Escuchando por mensajes de usuarios
 	socket.on('outgoing', function(data) {
 
 		socket.get('nickname', function(err,nickname) {
