@@ -1,7 +1,5 @@
 
-/**
- * Module dependencies.
- */
+// Modulos de las dependencias
 
 var express = require('express');
 var app = express();
@@ -10,10 +8,10 @@ var io = require('socket.io').listen(server);
 var handler = require('./handler');
 var port = 1337;
 
-// Sets up express static server directory to the /public folder
+// Configurar el servidor estático de express al directorio /public
 app.use(express.static(__dirname + '/public'));
 
-// Holds an array of users connected
+// Array de usuarios conectados
 var nicknames = [];
 
 io.sockets.on('connection', function(socket) {
