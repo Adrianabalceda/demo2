@@ -83,7 +83,7 @@ socket.on('incoming', function(data, self) {
 
 // Eventos de la UI
 
-// Submit handler for name entry box
+// Función que controla el ingreso de usuarios
 chatNameForm.on('submit', function(e){
 
 	e.preventDefault();
@@ -91,82 +91,76 @@ chatNameForm.on('submit', function(e){
 	var chatName = $.trim( chatNameSection.find('#name').val() );
 
 	if(chatName != '') {
-        // Emit valid entry to server
-        // for validation against nicknames array
+        // Se comparte al servidor para que se valide con el array de usuarios
 		socket.emit('new user', { nickname: sanitize(chatName) });
 	} else {
 		chatNameSection.find('.form-group').addClass('has-error');
 	}
 });
 
-// Submit handler for message entry box
+// Función que controla el enviado de mensajes
 chatInputForm.on('submit', function(e){
 	e.preventDefault();
 	validateAndSend();		
 });
 
-// Trigger submit handler for message box programatically
-// when 'Enter' key is pressed. Does not match when
-// the Shift, Ctrl or Alt key are also pressed during that process
+// Enviar mensaje solo cuando esté presionada la tecla enter
+// sin estar presionada las teclas shift, ctrl y alt al mismo tiempo
 chatTextBox.on('keypress', function(e) {
 	if (e.which === 13 && e.shiftKey === false &&
 		e.altKey === false && e.ctrlKey === false &&
 
-        // Ensuring its not a touch device as
-        // you wouldn't want this event attached in that scenario
+        // Si es un dispositivo con pantalla táctil desactivamos este caso
         ('ontouchstart' in window === false || 'msMaxTouchPoints' in window.navigator === false)) {
 
-		// submit form
+		// Enviamos form
 		chatInputForm.submit();
-		return false; // prevent cursor from shifting to next line
+		return false; // Impide que el cursor se mueva a la siguiente línea
 	}
 });
 
-// Remove error when input is being typed in
+// Quitar error cuando el usuario ha sido escrito 
 chatNameSection.find('#name').on('keypress', function(e) {
 	chatNameSection.find('.has-error').removeClass('has-error').removeClass('has-nickname-taken');
 });
 
-// Modal Popup - as part of Bootstrap Javascript components
+// Modal Popup
 modalPopupBtn.on('click', function(e) {
 	usersBox.modal();
 });
 
 
 
-/**
- * Helper functions
- */
+// Funciones de ayuda
 
-// Convert html tags into literal strings
+// Convertir tags html en strings
 function sanitize (input) {
 	var input = input.replace(/>/g, '&gt;').replace(/</g,'&lt;').replace('\n','<br/>');
 	return input;
 }
 
-// Appends messages to chat box and scroll down
-// to latest notification
+// Añade mensaje al chat y hace scroll a la parte inferior
 function appendAndScroll (html) {
 	chatBox.append(html);
 	chatBox.scrollTop(chatBox[0].scrollHeight);
 
-	// Plays sound if its not already playing
+	// Sonido del chat
 	chatSound.play();
 }
 
-// Validate and send messages
+// Validar y enviar mensajes
 function validateAndSend () {
 	var chatMessage = $.trim(chatTextBox.val());
 
 	if(chatMessage != '') {
 		socket.emit('outgoing', { message: sanitize(chatMessage) });
 
-		// Clear chat text box after message success
+		// Limpiar caja de texto después de enviar
 		chatTextBox.val('');
 	}
 };
 
-// Populate/Update users list
+// Llenar listado de usuarios
 function updateUsers (nicknames) {
 
 	var users = '<ul class="list-group">';
@@ -177,10 +171,10 @@ function updateUsers (nicknames) {
 
 	users+='</ul>';
 
-	// Update users box
+	// Actualizar caja de usuarios
 	usersBox.find('.modal-body').html(users);
 
-	// Update 'Users Online' counter
+	// Actualizar contador de usuarios conectados
 	usersOnlineCounter.text(nicknames.length);
 }
 
