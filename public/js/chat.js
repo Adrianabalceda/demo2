@@ -40,7 +40,7 @@ socket.on('welcome', function(nickname, nicknames) {
 	chatBoxSection.show(500);
 	chatInputSection.show(500);
 
-	chatBoxSection.find('#user').html('Hola, <span class="text-success">' + nickname + '</span>');
+	chatBoxSection.find('#user').html('Hola, <span class="badge bg-primary">' + nickname + '</span>');
 
 	// Actualizar lista de usuarios
 	updateUsers(nicknames);
