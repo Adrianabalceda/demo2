@@ -1,7 +1,7 @@
 (function($){
 
 
-// window.location.origin polyfill support for IE
+// window.location.origin soporte para IE
 if (!window.location.origin) {window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');}
 
 var socket = io.connect(window.location.origin);
